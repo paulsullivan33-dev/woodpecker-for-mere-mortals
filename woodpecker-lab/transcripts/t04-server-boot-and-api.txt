@@ -1,0 +1,54 @@
+$ # Attempt 1: server with sqlite but NO forge configured
+{"level":"info","time":"2026-11-01T03:11:38Z","message":"log level: info"}
+{"level":"warn","time":"2026-11-01T03:11:38Z","message":"no sqlite3 file found, will create one at '/home/hatch/workspace/woodpecker-labwork/server-data/woodpecker.sqlite'"}
+{"level":"info","time":"2026-11-01T03:11:39Z","message":"Initializing Schema"}
+{"level":"error","error":"can't setup globals: could not setup service manager: forge not configured","time":"2026-11-01T03:11:44Z","message":"error running server"}
+exit=0 — misleadingly polite: the process exits 0 despite the fatal error above; the proof it refused is that no listener ever appears on the port
+
+$ # Attempt 2: same, plus a GitHub forge with INVENTED placeholder OAuth values
+$ # (WOODPECKER_GITHUB=true, client id/secret are lab inventions; OAuth itself is not exercised)
+server pid 83812
+--- server boot log ---
+{"level":"info","time":"2026-11-01T03:11:44Z","message":"log level: info"}
+{"level":"info","time":"2026-11-01T03:11:44Z","message":"WOODPECKER_FORCE_IGNORE_SERVICE_FAILURE is true by default. To prepare for v4.0.0, set it to false and update your pipeline definitions if needed."}
+{"level":"info","time":"2026-11-01T03:11:44Z","message":"starting Woodpecker server with version '3.20.1'"}
+{"level":"info","time":"2026-11-01T03:11:44Z","message":"store metric collector started"}
+{"level":"info","time":"2026-11-01T03:11:44Z","message":"starting cron service ..."}
+{"level":"info","time":"2026-11-01T03:11:44Z","message":"starting grpc server ..."}
+{"level":"warn","time":"2026-11-01T03:11:44Z","message":"WOODPECKER_GRPC_SECRET is not set; generated a temporary random secret. Set and persist WOODPECKER_GRPC_SECRET to keep the same secret across restarts"}
+{"level":"info","time":"2026-11-01T03:11:44Z","message":"queue metric collector started"}
+{"level":"info","time":"2026-11-01T03:11:44Z","message":"starting http server ..."}
+--- listening sockets (only 18082 is TCP; gRPC is the unix socket) ---
+LISTEN 0      0          127.0.0.1:18082      0.0.0.0:*    users:(("woodpecker-serv",pid=83812,fd=7))
+total 272
+drwxrwx--- 1 root root     54 Nov  1 03:11 .
+drwxrwx--- 1 root root    530 Nov  1 03:11 ..
+srwxrwx--- 1 root root      0 Nov  1 03:11 agent.sock
+-rw-r----- 1 root root 270336 Nov  1 03:11 woodpecker.sqlite
+
+$ curl -s -o /dev/null -w ... http://127.0.0.1:18082/
+GET / -> http_status=200 content_type=text/html; charset=UTF-8 bytes=1288
+<title>Woodpecker</title>
+$ curl http://127.0.0.1:18082/healthz
+GET /healthz -> http_status=204
+$ curl http://127.0.0.1:18082/api/version
+{"source":"https://github.com/woodpecker-ci/woodpecker","version":"3.20.1"}
+GET /api/version -> http_status=200
+$ curl http://127.0.0.1:18082/api/forges
+[{"id":1,"type":"github","url":"https://github.com"}]
+GET /api/forges -> http_status=200
+$ curl http://127.0.0.1:18082/api/user   (no token)
+User not authorized
+GET /api/user -> http_status=401
+$ curl http://127.0.0.1:18082/api/repos   (no token)
+User not authorized
+GET /api/repos -> http_status=401
+$ curl -o /dev/null -w ... http://127.0.0.1:18082/swagger/index.html
+GET /swagger/index.html -> http_status=200
+$ curl http://127.0.0.1:18082/login
+GET /login -> http_status=200 bytes=1288
+<title>Woodpecker</title>
+$ woodpecker-cli --server http://127.0.0.1:18082 info   (no context configured)
+{"level":"info","time":"2026-11-01T03:11:45Z","message":"woodpecker-cli is not set up, run `woodpecker-cli setup` to create a context"}
+{"level":"fatal","error":"woodpecker-cli is not configured","time":"2026-11-01T03:11:45Z","message":"error running cli"}
+exit=1

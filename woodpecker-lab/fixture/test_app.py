@@ -1,0 +1,18 @@
+import unittest
+
+from app import add, greeting
+
+
+class TestApp(unittest.TestCase):
+    def test_add(self):
+        self.assertEqual(add(2, 3), 5)
+
+    def test_add_negative(self):
+        self.assertEqual(add(-1, 1), 0)
+
+    def test_greeting(self):
+        self.assertEqual(greeting("world"), "Hello, world!")
+
+
+if __name__ == "__main__":
+    unittest.main()

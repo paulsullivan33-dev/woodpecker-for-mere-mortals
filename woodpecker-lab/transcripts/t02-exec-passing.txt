@@ -1,0 +1,34 @@
+$ # First attempt: the server-style pipeline (image: python:3.12) under the local backend
+$ woodpecker-cli exec --local --backend-engine local .woodpecker.yaml
+⚠️  pipeline has 2 warnings:
+   ⚠️  Consider adding a `when` block with an `event` filter to this step or the entire workflow
+   ⚠️  Consider adding a `when` block with an `event` filter to this step or the entire workflow
+# woodpecker
+exec: "python:3.12": executable file not found in $PATH
+
+{"level":"fatal","error":"exec: \"python:3.12\": executable file not found in $PATH","time":"2026-11-01T03:11:38Z","message":"error running cli"}
+exit=1
+
+$ # The local backend runs the 'image' as a program on this machine.
+$ # Same steps with image: bash in .woodpecker-local.yaml:
+$ woodpecker-cli exec --local --backend-engine local .woodpecker-local.yaml
+⚠️  pipeline has 2 warnings:
+   ⚠️  Consider adding a `when` block with an `event` filter to this step or the entire workflow
+   ⚠️  Consider adding a `when` block with an `event` filter to this step or the entire workflow
+# woodpecker-local
+[build:L0:0s] ▶  python3 --version
+[build:L1:0s] Python 3.12.3
+[build:L2:0s] ▶  python3 -m py_compile app.py test_app.py
+[build:L3:0s] ▶  echo "build step finished"
+[build:L4:0s] build step finished
+[test:L0:0s] ▶  python3 -m unittest -v
+[test:L1:0s] test_add (test_app.TestApp.test_add) ... ok
+[test:L2:0s] test_add_negative (test_app.TestApp.test_add_negative) ... ok
+[test:L3:0s] test_greeting (test_app.TestApp.test_greeting) ... ok
+[test:L4:0s] 
+[test:L5:0s] ----------------------------------------------------------------------
+[test:L6:0s] Ran 3 tests in 0.000s
+[test:L7:0s] 
+[test:L8:0s] OK
+
+exit=0

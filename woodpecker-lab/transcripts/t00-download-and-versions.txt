@@ -1,0 +1,19 @@
+$ date -u; uname -srm; python3 --version
+Sun Nov  1 03:11:37 UTC 2026
+Linux 7.0.0-39-generic x86_64
+Python 3.12.3
+
+$ # Release: woodpecker-ci/woodpecker latest (GitHub API)
+tag: v3.20.1
+published: 2026-10-29T19:39:14Z
+url: https://github.com/woodpecker-ci/woodpecker/releases/tag/v3.20.1
+
+$ sha256sum -c sums.txt   (official checksums.txt from the release)
+woodpecker-agent_linux_amd64.tar.gz: OK
+woodpecker-cli_linux_amd64.tar.gz: OK
+woodpecker-server_linux_amd64.tar.gz: OK
+
+$ woodpecker-cli --version; woodpecker-server --version; woodpecker-agent --version
+woodpecker-cli version 3.20.1
+woodpecker-server version 3.20.1
+woodpecker-agent version 3.20.1

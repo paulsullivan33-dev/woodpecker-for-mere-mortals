@@ -1,0 +1,20 @@
+# Deliberately broken pipeline: the test step fails on purpose so
+# the guide can show the exit code and what happens to later steps.
+steps:
+  - name: build
+    image: bash
+    commands:
+      - echo "build step finished"
+
+  - name: test
+    image: bash
+    commands:
+      - echo "running a check that fails on purpose"
+      - exit 3
+    depends_on: [build]
+
+  - name: report
+    image: bash
+    commands:
+      - echo "this step should not run after a failed test step"
+    depends_on: [test]

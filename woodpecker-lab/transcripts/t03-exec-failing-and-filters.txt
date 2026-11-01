@@ -1,0 +1,45 @@
+$ # Deliberately failing pipeline: test step runs 'exit 3'; report step depends on it
+$ woodpecker-cli exec --local --backend-engine local .woodpecker-fail-local.yaml
+⚠️  pipeline has 3 warnings:
+   ⚠️  Consider adding a `when` block with an `event` filter to this step or the entire workflow
+   ⚠️  Consider adding a `when` block with an `event` filter to this step or the entire workflow
+   ⚠️  Consider adding a `when` block with an `event` filter to this step or the entire workflow
+# woodpecker-fail-local
+[build:L0:0s] ▶  echo "build step finished"
+[build:L1:0s] build step finished
+[test:L0:0s] ▶  echo "running a check that fails on purpose"
+[test:L1:0s] running a check that fails on purpose
+[test:L2:0s] ▶  exit 3
+uuid=01M6AHEQBC5GQE0NGCQQR0MZA6: exit code 3
+
+{"level":"fatal","error":"uuid=01M6AHEQBC5GQE0NGCQQR0MZA6: exit code 3","time":"2026-11-01T03:11:38Z","message":"error running cli"}
+exit=1
+
+$ # Context and filters: environment block, CI_* variables, and a step with when: event: push
+$ # (exec runs with CI_PIPELINE_EVENT=manual, so the push-only step must be skipped)
+$ woodpecker-cli exec --local --backend-engine local .woodpecker-env.yaml
+⚠️  pipeline has 1 warnings:
+   ⚠️  Consider adding a `when` block with an `event` filter to this step or the entire workflow
+# woodpecker-env
+[show-context:L0:0s] ▶  echo "GREETING is $GREETING"
+[show-context:L1:0s] GREETING is hello-from-the-pipeline
+[show-context:L2:0s] ▶  env | grep -E "^CI_(PIPELINE|COMMIT|REPO|WORKSPACE)" | sort
+[show-context:L3:0s] CI_COMMIT_BRANCH=main
+[show-context:L4:0s] CI_COMMIT_TIMESTAMP=0
+[show-context:L5:0s] CI_PIPELINE_CREATED=0
+[show-context:L6:0s] CI_PIPELINE_EVENT=manual
+[show-context:L7:0s] CI_PIPELINE_FILES=[""]
+[show-context:L8:0s] CI_PIPELINE_NUMBER=0
+[show-context:L9:0s] CI_PIPELINE_PARENT=0
+[show-context:L10:0s] CI_PIPELINE_STARTED=1793502698
+[show-context:L11:0s] CI_PIPELINE_STATUS=success
+[show-context:L12:0s] CI_PIPELINE_URL=https://github.com/woodpecker-ci/woodpecker/repos/0/pipeline/0
+[show-context:L13:0s] CI_REPO_DEFAULT_BRANCH=main
+[show-context:L14:0s] CI_REPO_PRIVATE=false
+[show-context:L15:0s] CI_REPO_TRUSTED=false
+[show-context:L16:0s] CI_REPO_TRUSTED_NETWORK=false
+[show-context:L17:0s] CI_REPO_TRUSTED_SECURITY=false
+[show-context:L18:0s] CI_REPO_TRUSTED_VOLUMES=false
+[show-context:L19:0s] CI_WORKSPACE=/home/hatch/workspace/woodpecker-labwork/fixture
+
+exit=0

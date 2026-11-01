@@ -1,0 +1,15 @@
+steps:
+  - name: show-context
+    image: bash
+    environment:
+      GREETING: hello-from-the-pipeline
+    commands:
+      - echo "GREETING is $GREETING"
+      - env | grep -E "^CI_(PIPELINE|COMMIT|REPO|WORKSPACE)" | sort
+
+  - name: push-only
+    image: bash
+    when:
+      event: push
+    commands:
+      - echo "this step only runs on push events"

@@ -1,0 +1,6 @@
+steps:
+  - name: build
+    image: python:3.12
+    commands:
+      - echo hello
+    no_such_setting: true

@@ -1,0 +1,28 @@
+site_name: Woodpecker for Mere Mortals
+site_description: A self hosted continuous integration system in three small programs. Checking a pipeline file and running it locally with the command line tool, booting the server with its SQLite database, registering an agent in local mode without containers, and understanding forges, webhooks and backends, with the limits stated plainly.
+site_url: https://paulsullivan33-dev.github.io/woodpecker-for-mere-mortals/
+copyright: 'Part of <a href="https://paulsullivan33-dev.github.io/mere-mortals/">For Mere Mortals</a> · Text <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>, code MIT'
+
+# Guides live at the repo root (nice for GitHub browsing).
+# The deploy workflow copies them into docs/ before building.
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - What Woodpecker Is: what-woodpecker-is.md
+  - The Moving Parts: the-moving-parts.md
+  - Installing Woodpecker: installing-woodpecker.md
+  - Your First Pipeline: your-first-pipeline.md
+  - Reading a Pipeline File: reading-a-pipeline-file.md
+  - When Pipelines Fail: when-pipelines-fail.md
+  - Context, Environment and Filters: context-environment-and-filters.md
+  - Running the Server: running-the-server.md
+  - Agents and Backends: agents-and-backends.md
+  - Forges, Repositories and Webhooks: forges-repositories-and-webhooks.md
+  - Recipes: recipes.md
+  - The Neighbours: the-neighbours.md
+  - Limits: limits.md
+  - Troubleshooting: troubleshooting.md
+  - Glossary: glossary.md
+  - Writing Criteria: criteria.md

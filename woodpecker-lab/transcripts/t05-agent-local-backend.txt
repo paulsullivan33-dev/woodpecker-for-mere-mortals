@@ -1,0 +1,15 @@
+$ # Agent with the local backend, talking to the server over the unix gRPC socket
+$ WOODPECKER_SERVER=unix://.../server-data/agent.sock WOODPECKER_BACKEND=local woodpecker-agent
+agent pid 83849
+--- agent log ---
+{"level":"info","time":"2026-11-01T03:11:46Z","message":"log level: info"}
+{"level":"info","version":"3.20.1","time":"2026-11-01T03:11:46Z","message":"Starting Woodpecker agent"}
+{"level":"info","time":"2026-11-01T03:11:46Z","message":"no agent config found at '/home/hatch/workspace/woodpecker-labwork/server-data/agent.conf', start with defaults"}
+{"level":"info","time":"2026-11-01T03:11:46Z","message":"log-entry stream buffer size set to max 100Mb"}
+{"level":"info","version":"3.20.1","backend":"local","platform":"linux/amd64","parallel workflows":1,"single workflow":false,"time":"2026-11-01T03:11:46Z","message":"starting Woodpecker agent"}
+
+$ # The server's sqlite database now holds the registered agent (token column not shown):
+{'id': 1, 'name': 'lab-agent', 'platform': 'linux/amd64', 'backend': 'local', 'capacity': 1, 'version': '3.20.1', 'last_contact': 1793502706, 'last_work': 0}
+
+$ # Shutdown: stop agent, then server; confirm the port is free
+port 18082 free again

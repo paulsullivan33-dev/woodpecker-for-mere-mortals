@@ -1,0 +1,17 @@
+# Fixture pipeline for the Woodpecker guide's lab.
+# On a real Woodpecker server each step runs in the named container
+# image. With the local backend (woodpecker-cli exec) the image name
+# is recorded but the commands run with the tools on this machine.
+steps:
+  - name: build
+    image: bash
+    commands:
+      - python3 --version
+      - python3 -m py_compile app.py test_app.py
+      - echo "build step finished"
+
+  - name: test
+    image: bash
+    commands:
+      - python3 -m unittest -v
+    depends_on: [build]

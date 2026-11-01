@@ -1,0 +1,22 @@
+$ woodpecker-cli lint .woodpecker.yaml
+⚠️  .woodpecker.yaml has 2 warnings:
+   ⚠️  Consider adding a `when` block with an `event` filter to this step or the entire workflow
+   ⚠️  Consider adding a `when` block with an `event` filter to this step or the entire workflow
+exit=0
+
+$ woodpecker-cli lint .woodpecker-invalid.yaml   (unknown key no_such_setting)
+⚠️  .woodpecker-invalid.yaml has 2 warnings:
+   ⚠️  steps.0	Additional property no_such_setting is not allowed
+   ⚠️  Consider adding a `when` block with an `event` filter to this step or the entire workflow
+exit=0
+
+$ woodpecker-cli lint --strict .woodpecker-invalid.yaml
+🔥 .woodpecker-invalid.yaml has 2 errors:
+   ❌ steps.0	Additional property no_such_setting is not allowed
+   ❌ Consider adding a `when` block with an `event` filter to this step or the entire workflow
+{"level":"fatal","error":"config has errors","time":"2026-11-01T03:11:38Z","message":"error running cli"}
+exit=1
+
+$ woodpecker-cli lint .woodpecker-badyaml.yaml   (malformed YAML)
+{"level":"fatal","error":"go-yaml load error in parser (while parsing a block collection) at L2.C3-L3.C4: did not find expected '-' indicator","time":"2026-11-01T03:11:38Z","message":"error running cli"}
+exit=1

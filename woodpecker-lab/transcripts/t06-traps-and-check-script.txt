@@ -1,0 +1,51 @@
+$ # Three ways to run the same passing pipeline file, three different results.
+
+$ # A: backend named, no --local flag — runs in the current folder and passes
+$ woodpecker-cli exec --backend-engine local .woodpecker-local.yaml
+⚠️  pipeline has 2 warnings:
+   ⚠️  Consider adding a `when` block with an `event` filter to this step or the entire workflow
+   ⚠️  Consider adding a `when` block with an `event` filter to this step or the entire workflow
+# woodpecker-local
+[build:L0:0s] ▶  python3 --version
+[build:L1:0s] Python 3.12.3
+[build:L2:0s] ▶  python3 -m py_compile app.py test_app.py
+[build:L3:0s] ▶  echo "build step finished"
+[build:L4:0s] build step finished
+[test:L0:0s] ▶  python3 -m unittest -v
+[test:L1:0s] test_add (test_app.TestApp.test_add) ... ok
+[test:L2:0s] test_add_negative (test_app.TestApp.test_add_negative) ... ok
+[test:L3:0s] test_greeting (test_app.TestApp.test_greeting) ... ok
+[test:L4:0s] 
+[test:L5:0s] ----------------------------------------------------------------------
+[test:L6:0s] Ran 3 tests in 0.000s
+[test:L7:0s] 
+[test:L8:0s] OK
+
+exit=0
+
+$ # B: no flags at all — backend auto-detect; the build step runs in a workspace
+$ #    that does not hold the project files, and py_compile cannot find app.py
+$ woodpecker-cli exec .woodpecker-local.yaml
+⚠️  pipeline has 2 warnings:
+   ⚠️  Consider adding a `when` block with an `event` filter to this step or the entire workflow
+   ⚠️  Consider adding a `when` block with an `event` filter to this step or the entire workflow
+# woodpecker-local
+[build:L0:0s] ▶  python3 --version
+[build:L1:0s] Python 3.12.3
+[build:L2:0s] ▶  python3 -m py_compile app.py test_app.py
+[build:L3:0s] [Errno 2] No such file or directory: 'app.py'uuid=01M6AHGJMP4B07H5GNQ697NXNN: exit code 1
+
+{"level":"fatal","error":"uuid=01M6AHGJMP4B07H5GNQ697NXNN: exit code 1","time":"2026-11-01T03:12:40Z","message":"error running cli"}
+exit=1
+
+$ # C: the lab's own check script against the server started for t04/t05
+$ woodpecker-lab/check-server.sh http://127.0.0.1:18082
+GET http://127.0.0.1:18082/ (web UI)
+  status=200 content_type=text/html; charset=UTF-8
+GET http://127.0.0.1:18082/healthz (health endpoint)
+  status=204 (204 means healthy)
+GET http://127.0.0.1:18082/api/version
+{"source":"https://github.com/woodpecker-ci/woodpecker","version":"3.20.1"}
+GET http://127.0.0.1:18082/api/user without a token (must refuse)
+  status=401 (401 means the door is locked)
+exit=0

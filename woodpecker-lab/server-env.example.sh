@@ -1,0 +1,10 @@
+export WOODPECKER_HOST=http://127.0.0.1:18082
+export WOODPECKER_SERVER_ADDR=127.0.0.1:18082
+export WOODPECKER_GRPC_ADDR=unix:///home/hatch/workspace/woodpecker-labwork/server-data/agent.sock
+export WOODPECKER_DATABASE_DRIVER=sqlite3
+export WOODPECKER_DATABASE_DATASOURCE=/home/hatch/workspace/woodpecker-labwork/server-data/woodpecker.sqlite
+export WOODPECKER_AGENT_SECRET=lab-agent-secret-invented-123
+export WOODPECKER_DISABLE_VERSION_CHECK=true
+export WOODPECKER_GITHUB=true
+export WOODPECKER_GITHUB_CLIENT=lab-invented-client-id
+export WOODPECKER_GITHUB_SECRET=lab-invented-client-secret
